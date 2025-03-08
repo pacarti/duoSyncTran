@@ -1,5 +1,4 @@
 import subprocess, os
-# from pathlib import Path
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -34,7 +33,22 @@ outputFileNoCover = outputFileNoExt + 'NoCover.mp3'
 
 print('Removing the cover...')
 
-subprocess.run('ffmpeg -i %s -id3v2_version 3 -vn -c:a copy %s' % (filename, outputFileNoCover), shell=True)
+# print(filename)
+# print(outputFileNoCover)
+
+# exit()
+
+command = 'ffmpeg -i \'%s\' -id3v2_version 3 -vn -c:a copy \'%s\'' % (filename, outputFileNoCover)
+print(command)
+
+# exit()
+
+# subprocess.run('ffmpeg -i %s -id3v2_version 3 -vn -c:a copy %s' % (filename, outputFileNoCover), shell=True)
+# subprocess.run('ffmpeg -i '+ filename + ' -id3v2_version 3 -vn -c:a copy ' + outputFileNoCover, shell=True)
+
+subprocess.run(command, shell=True)
+
+# subprocess.run('ffmpeg -i ' + input + ' ' + '-id3v2_version 3 -vn -c:a copy ' + output)
 
 # TODO: Take the transcription from the link(web scraping)
 # TODO: Apply the transcription to the podcast(aeneas)
