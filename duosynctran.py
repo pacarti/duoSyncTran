@@ -66,14 +66,22 @@ outputFileNoCover = outputFileNoExt + 'NoCover.mp3'
 print('Removing the cover...')
 
 
-command = 'ffmpeg -i \'%s\' -id3v2_version 3 -vn -c:a copy \'%s\'' % (filename, outputFileNoCover)
-print(command)
+removeCoverCmd = 'ffmpeg -i \'%s\' -id3v2_version 3 -vn -c:a copy \'%s\'' % (filename, outputFileNoCover)
+# print(removeCoverCmd)
 
-
-subprocess.run(command, shell=True)
+subprocess.run(removeCoverCmd, shell=True)
 
 # Take the transcription from the link(web scraping)
 fetchTranscription(url, outputFileNoExt)
 
-# TODO: Apply the transcription to the podcast(aeneas)
+# Sync the transcription to the podcast(aeneas)
+subprocess.run([
+    "python", "-m", "aeneas.tools.execute_task",
+    filename,
+    outputFileNoExt + '.txt',
+    'task_language=eng|is_text_type=plain|os_task_file_format=srt',
+    outputFileNoExt + '.srt'
+])
+
 # TODO: Apply the output srt to the mp3 file(ffmpeg)
+# TODO: Removing the MP3 input file with cover(and changing aeneas input to use one without cover)
