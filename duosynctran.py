@@ -1,4 +1,4 @@
-import subprocess, os, requests, bs4
+import subprocess, os, requests, bs4, shutil
 
 def fetchTranscription(url, outputFileNoExt):
 
@@ -10,9 +10,31 @@ def fetchTranscription(url, outputFileNoExt):
 
     podcastsAppleSoup = bs4.BeautifulSoup(res.text, 'html.parser')
 
+    # Get a link to the transcription
     pElems = podcastsAppleSoup.select('p')
 
-    linkToTranscription = pElems[1].getText().split()[11].rstrip('.')
+    '''for p in pElems:
+        print(p.getText())
+        if p.getText().startswith("A transcript"):
+            linkToTranscription = p.getText().split()[11].rstrip('.')
+            print(linkToTranscription)
+            # print(p.getText())'''
+    
+
+
+    # print(pElems[1].getText())
+
+    for word in pElems[1].getText().split():
+        # print(word)
+        if word.startswith('https://bit.ly'):
+            linkToTranscription = word.rstrip('.')
+
+
+    # linkToTranscription = pElems[1].getText().split()[11].rstrip('.')
+    
+    # print(linkToTranscription)
+
+    # exit()
 
 
     try:
@@ -36,7 +58,8 @@ def fetchTranscription(url, outputFileNoExt):
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-url = "https://podcasts.apple.com/us/podcast/le-surfeur-sans-limites-the-surfer-without-limits/id1466824259?i=1000445611085"
+url = "https://podcasts.apple.com/us/podcast/la-com%C3%A9dienne-de-balcon-the-balcony-performer-revisited/id1466824259?i=1000642573010"
+# url = 'https://podcasts.apple.com/us/podcast/le-surfeur-sans-limites-the-surfer-without-limits/id1466824259?i=1000445611085'
 
 # Download the podcast(subprocess, yt-dlp)
 
@@ -71,6 +94,14 @@ removeCoverCmd = 'ffmpeg -i \'%s\' -id3v2_version 3 -vn -c:a copy \'%s\'' % (fil
 
 subprocess.run(removeCoverCmd, shell=True)
 
+
+# Remove the original MP3 and rename the NoCover one to its name
+
+os.unlink(filename)
+# print(filename)
+# exit()
+shutil.move(outputFileNoCover, filename)
+
 # Take the transcription from the link(web scraping)
 fetchTranscription(url, outputFileNoExt)
 
@@ -83,5 +114,4 @@ subprocess.run([
     outputFileNoExt + '.srt'
 ])
 
-# TODO: Apply the output srt to the mp3 file(ffmpeg)
-# TODO: Removing the MP3 input file with cover(and changing aeneas input to use one without cover)
+# TODO: Implement an interactive link instead of rigid(with sys.argv)
