@@ -41,8 +41,14 @@ def fetchTranscription(url, outputFileNoExt):
     transcriptionFile.close()
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
-url = sys.argv[1]
+try:
+    url = sys.argv[1]
+    if not url.startswith("https://podcasts.apple.com"):
+        print("Usage: python duosynctran.py <url to podcast>. URL MUST BE from podcasts.apple.com!")
+        exit()
+except Exception:
+    print("Usage: python duosynctran.py <url to podcast>. URL MUST BE from podcasts.apple.com!")
+    exit()
 
 # Download the podcast(subprocess, yt-dlp)
 # 'stdout=subprocess.PIPE' instead of 'capture_output' because capture_output is incompatible with Python 3.6
