@@ -1,4 +1,4 @@
-import subprocess, os, requests, bs4, shutil
+import subprocess, os, requests, bs4, shutil, sys
 
 def fetchTranscription(url, outputFileNoExt):
 
@@ -13,28 +13,12 @@ def fetchTranscription(url, outputFileNoExt):
     # Get a link to the transcription
     pElems = podcastsAppleSoup.select('p')
 
-    '''for p in pElems:
-        print(p.getText())
-        if p.getText().startswith("A transcript"):
-            linkToTranscription = p.getText().split()[11].rstrip('.')
-            print(linkToTranscription)
-            # print(p.getText())'''
-    
-
-
-    # print(pElems[1].getText())
 
     for word in pElems[1].getText().split():
         # print(word)
         if word.startswith('https://bit.ly'):
             linkToTranscription = word.rstrip('.')
 
-
-    # linkToTranscription = pElems[1].getText().split()[11].rstrip('.')
-    
-    # print(linkToTranscription)
-
-    # exit()
 
 
     try:
@@ -58,16 +42,13 @@ def fetchTranscription(url, outputFileNoExt):
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-url = "https://podcasts.apple.com/us/podcast/la-com%C3%A9dienne-de-balcon-the-balcony-performer-revisited/id1466824259?i=1000642573010"
-# url = 'https://podcasts.apple.com/us/podcast/le-surfeur-sans-limites-the-surfer-without-limits/id1466824259?i=1000445611085'
+url = sys.argv[1]
 
 # Download the podcast(subprocess, yt-dlp)
-
-
-# result = subprocess.run(["yt-dlp", "--print", "filename", url], capture_output=True, text=True)
+# 'stdout=subprocess.PIPE' instead of 'capture_output' because capture_output is incompatible with Python 3.6
 
 result = subprocess.run(["yt-dlp", "--print", "filename", url],
-stdout=subprocess.PIPE,
+stdout=subprocess.PIPE, 
 stderr=subprocess.PIPE,
 universal_newlines=True) # Ensure output is str, not bytes
 
@@ -90,7 +71,7 @@ print('Removing the cover...')
 
 
 removeCoverCmd = 'ffmpeg -i \'%s\' -id3v2_version 3 -vn -c:a copy \'%s\'' % (filename, outputFileNoCover)
-# print(removeCoverCmd)
+
 
 subprocess.run(removeCoverCmd, shell=True)
 
@@ -98,12 +79,13 @@ subprocess.run(removeCoverCmd, shell=True)
 # Remove the original MP3 and rename the NoCover one to its name
 
 os.unlink(filename)
-# print(filename)
-# exit()
+
 shutil.move(outputFileNoCover, filename)
+
 
 # Take the transcription from the link(web scraping)
 fetchTranscription(url, outputFileNoExt)
+
 
 # Sync the transcription to the podcast(aeneas)
 subprocess.run([
@@ -114,4 +96,4 @@ subprocess.run([
     outputFileNoExt + '.srt'
 ])
 
-# TODO: Implement an interactive link instead of rigid(with sys.argv)
+print("Done!")
