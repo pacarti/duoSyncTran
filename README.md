@@ -9,11 +9,16 @@ Update 2026: Due to the aeneas compbatibility issues, the scipt was upgraded int
 
 
 On Linux:
+
+
 <code>chmod +x sync.sh</code> 
 
 
 Then:
+
+
 <code>./sync.sh "<url_to_podcast>"</code>
+
 <br><br><b>Warning: </b>The podcast URL MUST come from https://podcasts.apple.com
 <br><br><br>Example:<br>
 <code>./sync.sh https://podcasts.apple.com/us/podcast/le-grand-pari-the-big-gamble/id1466824259?i=1000534510175</code>
