@@ -41,7 +41,17 @@ def fetchTranscription(url, outputFileNoExt):
 
     transcriptionFile.close()
 
+# Change cwd to the file location dir
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+# Create an output path
+outputPathName = 'output'
+os.makedirs(outputPathName, exist_ok=True)
+
+# Change cwd into output folder so that the files are downloaded there
+os.chdir(outputPathName)
+
+
 try:
     url = sys.argv[1]
     if not url.startswith("https://podcasts.apple.com"):
