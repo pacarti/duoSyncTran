@@ -1,13 +1,17 @@
 # duoSyncTran
 Downloads the user-given Duolingo Podcast from https://podcasts.apple.com, syncs the transcription to it and outputs the .mp3 file of podcast with an .srt file with synced transcription.
 <br>Works with French podcasts.
-<br>
+<br><br>
 Update 2026: Due to the aeneas compbatibility issues, the scipt was upgraded into the Docker solution, so that it uses older version of Python - 3.11.
 
 ## Usage
 <code>docker build -t aeneas-legacy .</code>
+
+
 On Linux:
 <code>chmod +x sync.sh</code> 
+
+
 Then:
 <code>./sync.sh "<url_to_podcast>"</code>
 <br><br><b>Warning: </b>The podcast URL MUST come from https://podcasts.apple.com
