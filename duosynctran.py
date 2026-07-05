@@ -1,4 +1,5 @@
-import subprocess, os, requests, bs4, shutil, sys
+import subprocess, os, requests, bs4, shutil, sys, aeneas
+
 
 def fetchTranscription(url, outputFileNoExt):
 
@@ -95,11 +96,12 @@ fetchTranscription(url, outputFileNoExt)
 
 # Sync the transcription to the podcast(aeneas)
 subprocess.run([
-    "python", "-m", "aeneas.tools.execute_task",
+    "python3", "-m", "aeneas.tools.execute_task",
     filename,
     outputFileNoExt + '.txt',
     'task_language=eng|is_text_type=plain|os_task_file_format=srt',
     outputFileNoExt + '.srt'
 ])
+
 
 print("Done!")

@@ -1,0 +1,6 @@
+pip==23.3.2
+setuptools==59.8.0
+wheel==0.38.4
+numpy==1.23.5
+requests
+yt-dlp
