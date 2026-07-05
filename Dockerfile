@@ -20,3 +20,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Install aeneas (force legacy build mode)
 RUN pip install --no-cache-dir --no-build-isolation aeneas
+
+WORKDIR /work
+
+ENTRYPOINT ["python3", "duosynctran.py"]
